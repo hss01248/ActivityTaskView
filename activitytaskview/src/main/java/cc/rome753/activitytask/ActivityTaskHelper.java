@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.net.Uri;
@@ -12,6 +13,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -23,13 +25,26 @@ import java.util.List;
 public class ActivityTaskHelper {
     static String appName;
     static boolean hasRegisted;
+    static Application app;
+    static boolean openWhenInit;
 
-    public static void init(Application app) {
+    /**
+     * debug时默认打开,test默认关闭,可通过openOrClose(boolean open)让下次打开
+     * @param app
+     */
+     static void init(Application app) {
+        ActivityTaskHelper.app = app;
         appName = getAppName(app);
+        openWhenInit = app.getSharedPreferences("activitytask",Context.MODE_PRIVATE).getBoolean("open",isApkInDebug(app));
+        if(!openWhenInit){
+            Log.d("task","activitytask closed");
+            return;
+        }
         if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(app)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + app.getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             app.startActivity(intent);
+            Toast.makeText(app,"允许权限,然后下次打开app时生效",Toast.LENGTH_LONG).show();
         } else {
             if(hasRegisted){
                 return;
@@ -37,6 +52,22 @@ public class ActivityTaskHelper {
             app.registerActivityLifecycleCallbacks(new ActivityTaskHelper().activityLifecycleImpl);
             ActivityTask.start(app);
             hasRegisted = true;
+        }
+    }
+
+    static boolean isApkInDebug(Context context) {
+        try {
+            ApplicationInfo info = context.getApplicationInfo();
+            return (info.flags & ApplicationInfo.FLAG_DEBUGGABLE) != 0;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public static void openOrClose(boolean open){
+        app.getSharedPreferences("activitytask",Context.MODE_PRIVATE).edit().putBoolean("open",open).commit();
+        if(open && !openWhenInit){
+            init(app);
         }
     }
 
