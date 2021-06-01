@@ -27,11 +27,13 @@ public class ActivityTask {
 
     private static final String TAG = ActivityTask.class.getSimpleName();
 
-    private static ActivityTaskView activityTaskView;
+     static ActivityTaskView activityTaskView;
 
     public static long interval = 100;
+    static Context context;
 
     public static void start(Context context) {
+        ActivityTask.context = context;
         if (activityTaskView == null) {
             activityTaskView = new ActivityTaskView(context);
             addViewToWindow(context, activityTaskView);
@@ -41,7 +43,10 @@ public class ActivityTask {
     public static void clear() {
         if (activityTaskView != null) {
             activityTaskView.clear();
+            //WindowManager windowManager = (WindowManager) activityTaskView.getContext().getSystemService(Context.WINDOW_SERVICE);
+           // windowManager.removeView(activityTaskView);
         }
+
     }
 
     private static void addViewToWindow(Context context, View view) {
@@ -97,10 +102,11 @@ public class ActivityTask {
             } else {
                 lastTime = System.currentTimeMillis();
                 LifecycleInfo info = queue.poll();
-                Log.d("chao","queue.poll():"+info+"");
-                Log.d("chao","activityTaskView:"+activityTaskView+"");
+                //Log.d("chao","queue.poll():"+info+"");
+               // Log.d("chao","activityTaskView:"+activityTaskView+"");
+
                 if (info != null && activityTaskView != null) {
-                    if (info.fragments != null) {
+                    if (info.fragments != null ) {
                         if (info.lifecycle.contains("PreAttach")) {
                             activityTaskView.addF(info);
                         } else if (info.lifecycle.contains("Detach")) {
@@ -119,6 +125,9 @@ public class ActivityTask {
                     }
                 }else {
                     Log.w("chao","info:"+info+",activityTaskView:"+activityTaskView);
+                    if(activityTaskView == null){
+                        start(context);
+                    }
                 }
             }
         }

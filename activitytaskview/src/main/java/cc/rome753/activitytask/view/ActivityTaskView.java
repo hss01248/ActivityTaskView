@@ -110,7 +110,7 @@ public class ActivityTaskView extends LinearLayout implements Runnable {
 
     private void moveToBorder() {
         WindowManager.LayoutParams p = (WindowManager.LayoutParams) getLayoutParams();
-        Log.d("chao", "x " + p.x + " " + ((mScreenWidth - getWidth()) / 2));
+      //  Log.d("chao", "x " + p.x + " " + ((mScreenWidth - getWidth()) / 2));
 
         if(p.x <= (mScreenWidth - getWidth()) / 2) { // move left
             p.x = 0;
@@ -172,6 +172,7 @@ public class ActivityTaskView extends LinearLayout implements Runnable {
     private void notifyData() {
         ViewPool.get().recycle(mLinearLayout);
         mLinearLayout.removeAllViews();
+       // Log.d("chao","notifyData():"+aTree.toString());
         for(Map.Entry<String, ArrayList<String>> entry : aTree.entrySet()) {
             TaskLayout taskLayout = new TaskLayout(getContext());
             taskLayout.setTitle(entry.getKey());

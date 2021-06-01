@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -19,19 +21,38 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ActivityTaskHelper {
+    static String appName;
+    static boolean hasRegisted;
 
     public static void init(Application app) {
-
+        appName = getAppName(app);
         if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(app)) {
             Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + app.getPackageName()));
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             app.startActivity(intent);
         } else {
-
+            if(hasRegisted){
+                return;
+            }
             app.registerActivityLifecycleCallbacks(new ActivityTaskHelper().activityLifecycleImpl);
             ActivityTask.start(app);
+            hasRegisted = true;
         }
     }
+
+     static  String getAppName(Context context) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(
+                    context.getPackageName(), 0);
+            int labelRes = packageInfo.applicationInfo.labelRes;
+            return context.getResources().getString(labelRes);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     private ActivityLifecycleImpl activityLifecycleImpl = new ActivityLifecycleImpl();
 
@@ -61,7 +82,7 @@ public class ActivityTaskHelper {
 
     private void sendBroadcast(Activity activity, Fragment fragment) {
         String lifecycle = Thread.currentThread().getStackTrace()[5].getMethodName();
-        String task = activity.getPackageName() + "@0x" + Integer.toHexString(activity.getTaskId());
+        String task = appName + "@0x" + Integer.toHexString(activity.getTaskId());
         //String task = "cc.rome753.activitytask" + "@0x" + Integer.toHexString(activity.getTaskId());
         List<String> fragents = getAllFragments(fragment);
         /*String lifecycle = Thread.currentThread().getStackTrace()[5].getMethodName();
@@ -77,7 +98,10 @@ public class ActivityTaskHelper {
         }
         activity.sendBroadcast(intent);*/
 
-        Log.d("chao", lifecycle + " " + task + " " + activity + " " + fragents);
+       // Log.d("chao", lifecycle + " " + task + " " + activity + " " + fragents);
+        if(ActivityTask.activityTaskView ==  null){
+            ActivityTask.start(activity.getApplication());
+        }
 
         ActivityTask.add(lifecycle, task,getSimpleName(activity), fragents);
     }
@@ -88,6 +112,9 @@ public class ActivityTaskHelper {
             res.add(getSimpleName(fragment));
             fragment = fragment.getParentFragment();
         }
+        if(res.isEmpty()){
+            return null;
+        }
         return res;
     }
 
@@ -96,9 +123,11 @@ public class ActivityTaskHelper {
     }
 
     private class ActivityLifecycleImpl implements Application.ActivityLifecycleCallbacks{
+        int count;
 
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
+            count++;
             if(activity instanceof FragmentActivity){
                 ((FragmentActivity) activity).getSupportFragmentManager().registerFragmentLifecycleCallbacks(new FragmentLifecycleImpl(), true);
             }
@@ -133,7 +162,13 @@ public class ActivityTaskHelper {
         @Override
         public void onActivityDestroyed(Activity activity) {
             handleActivity(activity);
+            count--;
+            if(count ==0){
+                ActivityTask.clear();
+            }
         }
+
+
     }
 
     private class FragmentLifecycleImpl extends FragmentManager.FragmentLifecycleCallbacks{
