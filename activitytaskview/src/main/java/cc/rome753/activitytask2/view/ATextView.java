@@ -1,4 +1,4 @@
-package cc.rome753.activitytask.view;
+package cc.rome753.activitytask2.view;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -13,7 +13,7 @@ import androidx.appcompat.widget.AppCompatTextView;
 import java.util.Observable;
 import java.util.Observer;
 
-import cc.rome753.activitytask.model.LifecycleInfo;
+import cc.rome753.activitytask2.model.LifecycleInfo;
 
 /**
  * change text color when update

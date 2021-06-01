@@ -1,4 +1,4 @@
-package cc.rome753.activitytask.view;
+package cc.rome753.activitytask2.view;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -7,7 +7,7 @@ import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import cc.rome753.activitytask.AUtils;
+import cc.rome753.activitytask2.AUtils;
 import cc.rome753.activitytask.R;
 
 

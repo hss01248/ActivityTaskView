@@ -1,8 +1,6 @@
-package cc.rome753.activitytask.view;
+package cc.rome753.activitytask2.view;
 
 import android.content.Context;
-import android.content.Intent;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +11,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Map;
 
-import cc.rome753.activitytask.AUtils;
+import cc.rome753.activitytask2.AUtils;
 
 import cc.rome753.activitytask.R;
-import cc.rome753.activitytask.model.ATree;
-import cc.rome753.activitytask.model.LifecycleInfo;
-import cc.rome753.activitytask.model.ViewPool;
+import cc.rome753.activitytask2.model.ATree;
+import cc.rome753.activitytask2.model.LifecycleInfo;
+import cc.rome753.activitytask2.model.ViewPool;
 
 /**
  * Created by rome753 on 2017/3/31.

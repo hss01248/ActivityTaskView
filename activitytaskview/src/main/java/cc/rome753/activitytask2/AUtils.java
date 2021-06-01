@@ -1,4 +1,4 @@
-package cc.rome753.activitytask;
+package cc.rome753.activitytask2;
 
 import android.content.Context;
 import android.content.res.Resources;

@@ -1,4 +1,4 @@
-package cc.rome753.activitytask.model;
+package cc.rome753.activitytask2.model;
 
 import android.content.Context;
 import android.view.View;
@@ -8,14 +8,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Observable;
 
-import cc.rome753.activitytask.AUtils;
-import cc.rome753.activitytask.view.ATextView;
-import cc.rome753.activitytask.view.FragmentTaskView;
+import cc.rome753.activitytask2.AUtils;
+import cc.rome753.activitytask2.view.ATextView;
+import cc.rome753.activitytask2.view.FragmentTaskView;
 
 public class ViewPool extends Observable {
 
     LinkedList<ATextView> pool = new LinkedList<>();
-    HashMap<String,FragmentTaskView> map = new HashMap<>();
+    HashMap<String, FragmentTaskView> map = new HashMap<>();
 
     private static ViewPool factory = new ViewPool();
     public static ViewPool get() {

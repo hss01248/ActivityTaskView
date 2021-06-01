@@ -1,4 +1,4 @@
-package cc.rome753.activitytask.model;
+package cc.rome753.activitytask2.model;
 
 import java.util.List;
 

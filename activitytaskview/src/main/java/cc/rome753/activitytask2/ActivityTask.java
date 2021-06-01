@@ -1,4 +1,4 @@
-package cc.rome753.activitytask;
+package cc.rome753.activitytask2;
 
 import android.content.Context;
 import android.graphics.PixelFormat;
@@ -15,9 +15,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import cc.rome753.activitytask.model.LifecycleInfo;
-import cc.rome753.activitytask.view.ActivityTaskView;
-import cc.rome753.activitytask.view.FragmentTaskView;
+import cc.rome753.activitytask2.model.LifecycleInfo;
+import cc.rome753.activitytask2.view.ActivityTaskView;
 
 /**
  * Created by rome753@163.com on 2017/4/16.
