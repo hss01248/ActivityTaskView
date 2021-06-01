@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
@@ -96,6 +97,8 @@ public class ActivityTask {
             } else {
                 lastTime = System.currentTimeMillis();
                 LifecycleInfo info = queue.poll();
+                Log.d("chao","queue.poll():"+info+"");
+                Log.d("chao","activityTaskView:"+activityTaskView+"");
                 if (info != null && activityTaskView != null) {
                     if (info.fragments != null) {
                         if (info.lifecycle.contains("PreAttach")) {
@@ -114,6 +117,8 @@ public class ActivityTask {
                             activityTaskView.update(info);
                         }
                     }
+                }else {
+                    Log.w("chao","info:"+info+",activityTaskView:"+activityTaskView);
                 }
             }
         }

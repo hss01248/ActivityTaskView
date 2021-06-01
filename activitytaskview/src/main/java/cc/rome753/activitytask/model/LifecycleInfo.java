@@ -14,4 +14,14 @@ public class LifecycleInfo {
         this.activity = activity;
         this.fragments = fragments;
     }
+
+    @Override
+    public String toString() {
+        return "LifecycleInfo{" +
+                "lifecycle='" + lifecycle + '\'' +
+                ", task='" + task + '\'' +
+                ", activity='" + activity + '\'' +
+                ", fragments=" + fragments +
+                '}';
+    }
 }

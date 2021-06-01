@@ -1,29 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="cc.rome753.activitytask">
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
-        android:allowBackup="true"
-        android:icon="@mipmap/activity_task"
-        android:label="@string/app_name"
-        android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"
-            android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-        <receiver android:name=".LifecycleReceiver">
-            <intent-filter>
-                <action android:name="cc.rome753.activitytask.ACTION_UPDATE_LIFECYCLE" />
-            </intent-filter>
-        </receiver>
+        android:allowBackup="true">
+        <provider
+            android:name="androidx.startup.InitializationProvider"
+            android:authorities="${applicationId}.androidx-startup"
+            android:exported="false"
+            tools:node="merge">
+            <meta-data
+                android:name="cc.rome753.activitytask.InitForActivityTaskView"
+                android:value="androidx.startup" />
+        </provider>
     </application>
 
 </manifest>

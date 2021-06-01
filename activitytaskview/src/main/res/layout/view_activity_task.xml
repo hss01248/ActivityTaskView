@@ -11,8 +11,8 @@
         android:padding="8dp"
         android:visibility="gone"
         tools:visibility="visible"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+        android:layout_width="40dp"
+        android:layout_height="40dp" />
 
     <FrameLayout
         android:id="@+id/main_view"

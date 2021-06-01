@@ -4,7 +4,10 @@ import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 
@@ -13,11 +16,21 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ActivityTaskHelper {
 
     public static void init(Application app) {
-        app.registerActivityLifecycleCallbacks(new ActivityTaskHelper().activityLifecycleImpl);
+
+        if (Build.VERSION.SDK_INT >= 23 && !Settings.canDrawOverlays(app)) {
+            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + app.getPackageName()));
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            app.startActivity(intent);
+        } else {
+
+            app.registerActivityLifecycleCallbacks(new ActivityTaskHelper().activityLifecycleImpl);
+            ActivityTask.start(app);
+        }
     }
 
     private ActivityLifecycleImpl activityLifecycleImpl = new ActivityLifecycleImpl();
@@ -48,16 +61,25 @@ public class ActivityTaskHelper {
 
     private void sendBroadcast(Activity activity, Fragment fragment) {
         String lifecycle = Thread.currentThread().getStackTrace()[5].getMethodName();
+        String task = activity.getPackageName() + "@0x" + Integer.toHexString(activity.getTaskId());
+        //String task = "cc.rome753.activitytask" + "@0x" + Integer.toHexString(activity.getTaskId());
+        List<String> fragents = getAllFragments(fragment);
+        /*String lifecycle = Thread.currentThread().getStackTrace()[5].getMethodName();
         String packageName = "cc.rome753.activitytask";
         Intent intent = new Intent(packageName + ".ACTION_UPDATE_LIFECYCLE");
         intent.setPackage(packageName);
         intent.putExtra("lifecycle", lifecycle);
+        intent.putExtra("task", );
         intent.putExtra("task", activity.getPackageName() + "@0x" + Integer.toHexString(activity.getTaskId()));
         intent.putExtra("activity", getSimpleName(activity));
         if(fragment != null) {
             intent.putStringArrayListExtra("fragments", getAllFragments(fragment));
         }
-        activity.sendBroadcast(intent);
+        activity.sendBroadcast(intent);*/
+
+        Log.d("chao", lifecycle + " " + task + " " + activity + " " + fragents);
+
+        ActivityTask.add(lifecycle, task,getSimpleName(activity), fragents);
     }
 
     private ArrayList<String> getAllFragments(Fragment fragment){

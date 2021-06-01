@@ -14,7 +14,7 @@ import java.util.HashSet;
 import java.util.Map;
 
 import cc.rome753.activitytask.AUtils;
-import cc.rome753.activitytask.MainActivity;
+
 import cc.rome753.activitytask.R;
 import cc.rome753.activitytask.model.ATree;
 import cc.rome753.activitytask.model.LifecycleInfo;
@@ -96,9 +96,9 @@ public class ActivityTaskView extends LinearLayout implements Runnable {
     }
 
     private void doLongClick() {
-        Intent intent = new Intent(getContext().getApplicationContext(), MainActivity.class);
+        /*Intent intent = new Intent(getContext().getApplicationContext(), MainActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        getContext().getApplicationContext().startActivity(intent);
+        getContext().getApplicationContext().startActivity(intent);*/
     }
 
     private void updateLayout(WindowManager.LayoutParams params){

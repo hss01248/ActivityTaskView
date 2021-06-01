@@ -20,6 +20,6 @@ public class LifecycleReceiver extends BroadcastReceiver {
         String s = fragments == null ? "" : Arrays.toString(fragments.toArray());
         Log.d("chao", lifecycle + " " + task + " " + activity + " " + s);
 
-        ActivityTask.add(lifecycle, task, activity, fragments);
+        //ActivityTask.add(lifecycle, task, activity, fragments);
     }
 }

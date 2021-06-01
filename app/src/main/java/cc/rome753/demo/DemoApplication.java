@@ -2,7 +2,7 @@ package cc.rome753.demo;
 
 import android.app.Application;
 
-import cc.rome753.activitytask.ActivityTaskHelper;
+
 
 /**
  * Created by rome753@163.com on 2017/3/23.
@@ -17,7 +17,7 @@ public class DemoApplication extends Application{
         super.onCreate();
 
         if(BuildConfig.DEBUG) {
-            ActivityTaskHelper.init(this);
+            //ActivityTaskHelper.init(this);
         }
     }
 
