@@ -19,6 +19,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +36,8 @@ public class ActivityTaskHelper {
      static void init(Application app) {
         ActivityTaskHelper.app = app;
         appName = getAppName(app);
-        openWhenInit = app.getSharedPreferences("activitytask",Context.MODE_PRIVATE).getBoolean("open",isApkInDebug(app));
+        openWhenInit = app.getSharedPreferences("activitytask",Context.MODE_PRIVATE).getBoolean("open",
+                isApkInDebug(app) && isBuildTypeDebug(app));
         if(!openWhenInit){
             Log.d("task","activitytask closed");
             return;
@@ -53,6 +55,21 @@ public class ActivityTaskHelper {
             ActivityTask.start(app);
             hasRegisted = true;
         }
+    }
+
+    private static boolean isBuildTypeDebug(Application app) {
+         String pkgName = app.getPackageName();
+         try {
+             Class clazz = Class.forName(pkgName+".BuildConfig");
+             Field build_type = clazz.getDeclaredField("BUILD_TYPE");
+             String type = (String) build_type.get(clazz);
+             if(type.contains("debug")){
+                 return true;
+             }
+         }catch (Throwable throwable){
+
+         }
+        return false;
     }
 
     static boolean isApkInDebug(Context context) {
